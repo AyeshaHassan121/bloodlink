@@ -12,3 +12,4 @@ function e($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
 function require_login() {
     if (empty($_SESSION['user_id'])) { header('Location: login.php'); exit; }
 }
+$GROUPS = ['A+','A-','B+','B-','AB+','AB-','O+','O-'];
