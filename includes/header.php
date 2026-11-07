@@ -15,6 +15,7 @@ if (empty($_SESSION['user_id']) && !in_array(basename($_SERVER['SCRIPT_NAME']), 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fredoka:wght@600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
+<script src="assets/js/validate.js" defer></script>
 </head>
 <body>
 <div class="page">
