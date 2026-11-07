@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $msg = 'Your request is posted.';
     }
 }
-$rows = $pdo->query('SELECT patient_name, blood_group, city, contact, details, created_at FROM blood_requests ORDER BY created_at DESC')->fetchAll();
+$rows = $pdo->query('SELECT id, user_id, patient_name, blood_group, city, contact, details, created_at FROM blood_requests ORDER BY created_at DESC')->fetchAll();
 ?>
 <main class="card wide">
   <h2>Post a blood request</h2>
@@ -37,14 +37,23 @@ $rows = $pdo->query('SELECT patient_name, blood_group, city, contact, details, c
 
 <main class="card wide">
   <h2>All requests</h2>
+  <p class="alt">Received the blood you needed? Delete your request so donors know it is closed.</p>
   <div class="table-wrap">
   <table>
-    <tr><th>Patient</th><th>Blood group</th><th>City</th><th>Contact</th><th>Details</th><th>Posted</th></tr>
+    <tr><th>Patient</th><th>Blood group</th><th>City</th><th>Contact</th><th>Details</th><th>Posted</th><th></th></tr>
     <?php foreach ($rows as $r): ?>
       <tr><td><?= e($r['patient_name']) ?></td><td><?= e($r['blood_group']) ?></td><td><?= e($r['city']) ?></td>
-          <td><?= e($r['contact']) ?></td><td><?= e($r['details']) ?></td><td><?= e(substr($r['created_at'], 0, 10)) ?></td></tr>
+          <td><?= e($r['contact']) ?></td><td><?= e($r['details']) ?></td><td><?= e(substr($r['created_at'], 0, 10)) ?></td>
+          <td>
+            <?php if ((int)$r['user_id'] === (int)$_SESSION['user_id']): ?>
+              <form method="post" action="delete_request.php" onsubmit="return confirm('Delete this request?')">
+                <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
+                <button class="btn-dark" type="submit">Delete</button>
+              </form>
+            <?php endif; ?>
+          </td></tr>
     <?php endforeach; ?>
-    <?php if (!$rows): ?><tr><td colspan="6">No requests yet.</td></tr><?php endif; ?>
+    <?php if (!$rows): ?><tr><td colspan="7">No requests yet.</td></tr><?php endif; ?>
   </table>
   </div>
 </main>
