@@ -32,5 +32,10 @@ $q = $pdo->prepare('SELECT * FROM donors WHERE user_id = ?'); $q->execute([$uid]
     <label>Phone<input name="phone" required value="<?= e($d['phone'] ?? '') ?>"></label>
     <button class="btn-red" type="submit">Save details</button>
   </form>
+  <?php if ($d): ?>
+  <form method="post" action="remove_donor.php" onsubmit="return confirm('Remove your donor details?')">
+    <button class="btn-dark" type="submit">Remove me as a donor</button>
+  </form>
+  <?php endif; ?>
 </main>
 <?php require 'includes/footer.php'; ?>
