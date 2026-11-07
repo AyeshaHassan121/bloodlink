@@ -25,6 +25,7 @@ if (empty($_SESSION['user_id']) && !in_array(basename($_SERVER['SCRIPT_NAME']), 
       <li><a href="search.php">Find Donors</a></li>
       <li><a href="donor.php">Donate</a></li>
       <li><a href="requests.php">Requests</a></li>
+<?php if (($_SESSION['is_admin'] ?? 0) == 1): ?><li><a href="admin.php">Admin</a></li><?php endif; ?>
     </ul>
     <?php if (!empty($_SESSION['user_id'])): ?>
       <span class="nav-user"><a href="dashboard.php">Dashboard</a> <a class="btn-dark" href="logout.php">Log out</a></span>
