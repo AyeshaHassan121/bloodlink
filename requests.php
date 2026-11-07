@@ -12,7 +12,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $msg = 'Your request is posted.';
     }
 }
-$rows = $pdo->query('SELECT id, user_id, patient_name, blood_group, city, contact, details, created_at FROM blood_requests ORDER BY created_at DESC')->fetchAll();
+$fbg = $_GET['blood_group'] ?? ''; $fcity = trim($_GET['city'] ?? '');
+$sql = 'SELECT id, user_id, patient_name, blood_group, city, contact, details, created_at FROM blood_requests WHERE 1=1';
+$args = [];
+if (in_array($fbg, $GROUPS, true)) { $sql .= ' AND blood_group = ?'; $args[] = $fbg; }
+if ($fcity !== '') { $sql .= ' AND city LIKE ?'; $args[] = '%' . $fcity . '%'; }
+$sql .= ' ORDER BY created_at DESC';
+$q = $pdo->prepare($sql); $q->execute($args); $rows = $q->fetchAll();
 ?>
 <main class="card wide">
   <h2>Post a blood request</h2>
@@ -37,6 +43,18 @@ $rows = $pdo->query('SELECT id, user_id, patient_name, blood_group, city, contac
 
 <main class="card wide">
   <h2>All requests</h2>
+  <form method="get" class="row">
+    <label>Blood group
+      <select name="blood_group">
+        <option value="">Any</option>
+        <?php foreach ($GROUPS as $g): ?>
+          <option value="<?= e($g) ?>" <?= $fbg === $g ? 'selected' : '' ?>><?= e($g) ?></option>
+        <?php endforeach; ?>
+      </select>
+    </label>
+    <label>City<input name="city" value="<?= e($fcity) ?>"></label>
+    <div><button class="btn-red" type="submit">Filter</button></div>
+  </form>
   <p class="alt">Received the blood you needed? Delete your request so donors know it is closed.</p>
   <div class="table-wrap">
   <table>
@@ -53,7 +71,7 @@ $rows = $pdo->query('SELECT id, user_id, patient_name, blood_group, city, contac
             <?php endif; ?>
           </td></tr>
     <?php endforeach; ?>
-    <?php if (!$rows): ?><tr><td colspan="7">No requests yet.</td></tr><?php endif; ?>
+    <?php if (!$rows): ?><tr><td colspan="7">No requests found.</td></tr><?php endif; ?>
   </table>
   </div>
 </main>
