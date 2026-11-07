@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $u = $q->fetch();
     if ($u && password_verify($_POST['password'] ?? '', $u['password'])) {
         session_regenerate_id(true);
-        $_SESSION['user_id'] = $u['id']; $_SESSION['name'] = $u['name'];
+        $_SESSION['user_id'] = $u['id']; $_SESSION['name'] = $u['name']; $_SESSION['is_admin'] = (int)$u['is_admin'];
         header('Location: index.php'); exit;
     }
     $error = 'Incorrect email or password.';

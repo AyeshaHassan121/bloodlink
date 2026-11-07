@@ -13,3 +13,6 @@ function require_login() {
     if (empty($_SESSION['user_id'])) { header('Location: login.php'); exit; }
 }
 $GROUPS = ['A+','A-','B+','B-','AB+','AB-','O+','O-'];
+function require_admin() {
+    if (empty($_SESSION['is_admin'])) { http_response_code(403); die('Admins only.'); }
+}
