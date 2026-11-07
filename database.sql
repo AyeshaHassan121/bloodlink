@@ -1,0 +1,35 @@
+CREATE DATABASE IF NOT EXISTS bloodlink CHARACTER SET utf8mb4;
+CREATE USER IF NOT EXISTS 'blood_user'@'localhost' IDENTIFIED BY 'blood_pass';
+GRANT ALL PRIVILEGES ON bloodlink.* TO 'blood_user'@'localhost';
+FLUSH PRIVILEGES;
+USE bloodlink;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS donors (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL UNIQUE,
+  blood_group ENUM('A+','A-','B+','B-','AB+','AB-','O+','O-') NOT NULL,
+  city VARCHAR(100) NOT NULL,
+  phone VARCHAR(20) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS blood_requests (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  patient_name VARCHAR(100) NOT NULL,
+  blood_group ENUM('A+','A-','B+','B-','AB+','AB-','O+','O-') NOT NULL,
+  city VARCHAR(100) NOT NULL,
+  contact VARCHAR(20) NOT NULL,
+  details VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
