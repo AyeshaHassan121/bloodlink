@@ -64,3 +64,13 @@ th{background:var(--nav)}
 .hero-img,.mascot,.mascot img,.script{pointer-events:none}
 .hero-right{z-index:5}
 .hero-right .btn-red{position:relative;z-index:6;pointer-events:auto}
+.about{padding:56px 64px;background:#fff;border-top:3px solid var(--nav)}
+.about h2{font:700 2.2rem 'Fredoka',sans-serif;color:var(--red);margin-bottom:12px}
+.about .cols{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:24px}
+.about h3{font:700 1.1rem 'Montserrat',sans-serif;margin-bottom:10px}
+.about p,.about li{font-size:.85rem;font-weight:600;line-height:1.7}
+.about ul{padding-left:18px}
+@media(max-width:900px){.about{padding:32px 20px}.about .cols{grid-template-columns:1fr}}
+.facts{padding-left:20px}
+.facts li{font-size:.9rem;font-weight:600;line-height:1.9}
+.card .alt:first-of-type{margin-top:0}
