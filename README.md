@@ -10,3 +10,8 @@ Signup, login, logout (sessions), dashboard, donor registration, donor search by
 3. `sudo mysql < database.sql`
 4. `sudo service apache2 start && sudo service mysql start`
 5. Open http://localhost/bloodlink/
+
+## Creating an admin
+Sign up normally, then run:
+`sudo mysql bloodlink -e "UPDATE users SET is_admin=1 WHERE email='your@email.com';"`
+Log out and log in again to see the Admin link.
