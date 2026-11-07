@@ -17,6 +17,7 @@ $q = $pdo->prepare('SELECT * FROM donors WHERE user_id = ?'); $q->execute([$uid]
 ?>
 <main class="card">
   <h2>Donor registration</h2>
+  <p class="msg" style="background:var(--nav);border:2px solid var(--ink)">Before you register: donors are usually 18 to 65 years old, weigh at least 50 kg, are in good health, and wait about 3 months between donations. Rules vary, so confirm with your blood bank.</p>
   <?php if ($msg): ?><p class="msg ok"><?= e($msg) ?></p><?php endif; ?>
   <?php if ($error): ?><p class="msg err"><?= e($error) ?></p><?php endif; ?>
   <form method="post">
