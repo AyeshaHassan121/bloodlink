@@ -15,3 +15,6 @@ Signup, login, logout (sessions), dashboard, donor registration, donor search by
 Sign up normally, then run:
 `sudo mysql bloodlink -e "UPDATE users SET is_admin=1 WHERE email='your@email.com';"`
 Log out and log in again to see the Admin link.
+
+## Extras
+Donors can switch their availability on or off, and unavailable donors are hidden from search. Requesters can mark a request as fulfilled. Phone numbers are tap-to-call links.
