@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS donors (
   blood_group ENUM('A+','A-','B+','B-','AB+','AB-','O+','O-') NOT NULL,
   city VARCHAR(100) NOT NULL,
   phone VARCHAR(20) NOT NULL,
+  available TINYINT(1) NOT NULL DEFAULT 1,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
@@ -31,6 +32,7 @@ CREATE TABLE IF NOT EXISTS blood_requests (
   city VARCHAR(100) NOT NULL,
   contact VARCHAR(20) NOT NULL,
   details VARCHAR(255),
+  fulfilled TINYINT(1) NOT NULL DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
