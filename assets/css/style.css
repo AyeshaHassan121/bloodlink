@@ -81,3 +81,5 @@ form label.check{display:flex!important;flex-direction:row-reverse;justify-conte
 form label.check input[type=checkbox]{width:18px!important;height:18px;margin:0!important;flex:none}
 form label.check{display:flex!important;flex-direction:row-reverse;justify-content:flex-end;align-items:center;gap:10px}
 form label.check input[type=checkbox]{width:18px!important;height:18px;margin:0!important;flex:none}
+.site-footer p{margin:0}
+.site-footer{background:#ffd0e6;text-align:center;padding:0 16px;height:28px;display:flex;align-items:center;justify-content:center;font:700 .7rem 'Montserrat',sans-serif;color:#111}
