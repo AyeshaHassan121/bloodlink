@@ -4,16 +4,18 @@ $uid = $_SESSION['user_id'];
 $msg = ''; $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $bg = $_POST['blood_group'] ?? ''; $city = trim($_POST['city'] ?? ''); $phone = trim($_POST['phone'] ?? '');
+    $avail = isset($_POST['available']) ? 1 : 0;
     if (!in_array($bg, $GROUPS, true) || $city === '' || !preg_match('/^[0-9+\- ]{7,20}$/', $phone)) {
         $error = 'Choose a blood group, enter your city and a valid phone number.';
     } else {
-        $pdo->prepare('INSERT INTO donors (user_id, blood_group, city, phone) VALUES (?,?,?,?)
-                       ON DUPLICATE KEY UPDATE blood_group=VALUES(blood_group), city=VALUES(city), phone=VALUES(phone)')
-            ->execute([$uid, $bg, $city, $phone]);
+        $pdo->prepare('INSERT INTO donors (user_id, blood_group, city, phone, available) VALUES (?,?,?,?,?)
+                       ON DUPLICATE KEY UPDATE blood_group=VALUES(blood_group), city=VALUES(city), phone=VALUES(phone), available=VALUES(available)')
+            ->execute([$uid, $bg, $city, $phone, $avail]);
         $msg = 'Your donor details are saved.';
     }
 }
 $q = $pdo->prepare('SELECT * FROM donors WHERE user_id = ?'); $q->execute([$uid]); $d = $q->fetch() ?: [];
+$isAvail = $d ? (int)$d['available'] : 1;
 ?>
 <main class="card">
   <h2>Donor registration</h2>
@@ -31,6 +33,7 @@ $q = $pdo->prepare('SELECT * FROM donors WHERE user_id = ?'); $q->execute([$uid]
     </label>
     <label>City<input name="city" required value="<?= e($d['city'] ?? '') ?>"></label>
     <label>Phone<input name="phone" required value="<?= e($d['phone'] ?? '') ?>"></label>
+    <label class="check"><input type="checkbox" name="available" value="1" <?= $isAvail ? 'checked' : '' ?>> I am available to donate right now</label>
     <button class="btn-red" type="submit">Save details</button>
   </form>
   <?php if ($d): ?>
