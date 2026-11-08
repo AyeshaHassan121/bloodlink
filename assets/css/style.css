@@ -73,7 +73,6 @@ th{background:var(--nav)}
 @media(max-width:900px){.about{padding:32px 20px}.about .cols{grid-template-columns:1fr}}
 .facts{padding-left:20px}
 .facts li{font-size:.9rem;font-weight:600;line-height:1.9}
-.card .alt:first-of-type{margin-top:0}
 form label.check{display:flex;align-items:center;gap:10px}
 form label.check input{width:auto;margin:0}
 a.call{color:var(--red);font-weight:700}
@@ -83,3 +82,13 @@ form label.check{display:flex!important;flex-direction:row-reverse;justify-conte
 form label.check input[type=checkbox]{width:18px!important;height:18px;margin:0!important;flex:none}
 .site-footer p{margin:0}
 .site-footer{background:#ffd0e6;text-align:center;padding:0 16px;height:28px;display:flex;align-items:center;justify-content:center;font:700 .7rem 'Montserrat',sans-serif;color:#111}
+.page{display:flex;flex-direction:column;min-height:100vh}
+.card{width:100%}
+.site-footer{margin-top:auto}
+button.btn-dark,button.btn-red{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.78rem;line-height:1;border:0;outline:0;border-radius:20px;padding:11px 22px;cursor:pointer;color:#fff;-webkit-appearance:none;appearance:none}
+button.btn-dark{background:#111}
+button.btn-red{background:var(--red)}
+button:focus-visible{outline:3px solid #111;outline-offset:2px}
+.card form + form{margin-top:14px}
+td button.btn-dark,td button.btn-red{font-size:.72rem;padding:9px 16px}
+td form{display:inline-block!important;margin:3px 6px 3px 0}
