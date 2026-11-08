@@ -13,11 +13,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 $fbg = $_GET['blood_group'] ?? ''; $fcity = trim($_GET['city'] ?? '');
-$sql = 'SELECT id, user_id, patient_name, blood_group, city, contact, details, created_at FROM blood_requests WHERE 1=1';
+$sql = 'SELECT id, user_id, patient_name, blood_group, city, contact, details, fulfilled, created_at FROM blood_requests WHERE 1=1';
 $args = [];
 if (in_array($fbg, $GROUPS, true)) { $sql .= ' AND blood_group = ?'; $args[] = $fbg; }
 if ($fcity !== '') { $sql .= ' AND city LIKE ?'; $args[] = '%' . $fcity . '%'; }
-$sql .= ' ORDER BY created_at DESC';
+$sql .= ' ORDER BY fulfilled ASC, created_at DESC';
 $q = $pdo->prepare($sql); $q->execute($args); $rows = $q->fetchAll();
 ?>
 <main class="card wide">
@@ -55,23 +55,33 @@ $q = $pdo->prepare($sql); $q->execute($args); $rows = $q->fetchAll();
     <label>City<input name="city" value="<?= e($fcity) ?>"></label>
     <div><button class="btn-red" type="submit">Filter</button></div>
   </form>
-  <p class="alt">Received the blood you needed? Delete your request so donors know it is closed.</p>
+  <p class="alt">Received the blood you needed? Mark your request as fulfilled, or delete it.</p>
   <div class="table-wrap">
   <table>
-    <tr><th>Patient</th><th>Blood group</th><th>City</th><th>Contact</th><th>Details</th><th>Posted</th><th></th></tr>
+    <tr><th>Patient</th><th>Blood group</th><th>City</th><th>Contact</th><th>Details</th><th>Posted</th><th>Status</th><th></th></tr>
     <?php foreach ($rows as $r): ?>
-      <tr><td><?= e($r['patient_name']) ?></td><td><?= e($r['blood_group']) ?></td><td><?= e($r['city']) ?></td>
-          <td><?= e($r['contact']) ?></td><td><?= e($r['details']) ?></td><td><?= e(substr($r['created_at'], 0, 10)) ?></td>
-          <td>
-            <?php if ((int)$r['user_id'] === (int)$_SESSION['user_id']): ?>
-              <form method="post" action="delete_request.php" onsubmit="return confirm('Delete this request?')">
+      <tr>
+        <td><?= e($r['patient_name']) ?></td><td><?= e($r['blood_group']) ?></td><td><?= e($r['city']) ?></td>
+        <td><a class="call" href="tel:<?= e(preg_replace('/[^0-9+]/', '', $r['contact'])) ?>"><?= e($r['contact']) ?></a></td>
+        <td><?= e($r['details']) ?></td><td><?= e(substr($r['created_at'], 0, 10)) ?></td>
+        <td><?= $r['fulfilled'] ? 'Fulfilled' : 'Open' ?></td>
+        <td>
+          <?php if ((int)$r['user_id'] === (int)$_SESSION['user_id']): ?>
+            <?php if (!$r['fulfilled']): ?>
+              <form method="post" action="mark_fulfilled.php" style="display:inline">
                 <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
-                <button class="btn-dark" type="submit">Delete</button>
+                <button class="btn-red" type="submit">Mark fulfilled</button>
               </form>
             <?php endif; ?>
-          </td></tr>
+            <form method="post" action="delete_request.php" style="display:inline" onsubmit="return confirm('Delete this request?')">
+              <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
+              <button class="btn-dark" type="submit">Delete</button>
+            </form>
+          <?php endif; ?>
+        </td>
+      </tr>
     <?php endforeach; ?>
-    <?php if (!$rows): ?><tr><td colspan="7">No requests found.</td></tr><?php endif; ?>
+    <?php if (!$rows): ?><tr><td colspan="8">No requests found.</td></tr><?php endif; ?>
   </table>
   </div>
 </main>
